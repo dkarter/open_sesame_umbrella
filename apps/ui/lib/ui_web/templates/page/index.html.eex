@@ -1,0 +1,2 @@
+Status: <%= @status %>
+<%= button("Toggle Garage Door", to: garage_path(@conn, :toggle)) %>

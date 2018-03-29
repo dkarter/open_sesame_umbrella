@@ -1,0 +1,8 @@
+defmodule OpenSesameTest do
+  use ExUnit.Case
+  doctest OpenSesame
+
+  test "the truth" do
+    assert 1 + 1 == 2
+  end
+end
