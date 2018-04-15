@@ -12,17 +12,12 @@ defmodule OpenSesame.GarageWorker do
 
   def init(_) do
     :global.register_name(:garage_worker, self())
-    {:ok, %{gpio_pid: init_gpio(), status: true}}
+    {:ok, %{gpio_pid: init_gpio()}}
   end
 
-  def handle_call(:status, _from, state) do
-    {:reply, !state[:status], state}
-  end
-
-  def handle_call(:toggle, _from, state) do
-    new_state = toggle_status(state)
-    update_relay_pin_status(new_state)
-    {:reply, !new_state[:status], new_state}
+  def handle_cast(:toggle, state) do
+    update_relay_pin_status(state)
+    {:noreply, state}
   end
 
   # ===================================
@@ -34,11 +29,9 @@ defmodule OpenSesame.GarageWorker do
     pid
   end
 
-  defp toggle_status(state = %{status: status}) do
-    %{state | status: !status}
-  end
-
-  defp update_relay_pin_status(%{gpio_pid: gpio_pid, status: status}) do
-    GPIO.write(gpio_pid, status)
+  defp update_relay_pin_status(%{gpio_pid: gpio_pid}) do
+    GPIO.write(gpio_pid, false)
+    Process.sleep(1000)
+    GPIO.write(gpio_pid, true)
   end
 end
