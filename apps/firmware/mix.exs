@@ -7,13 +7,13 @@ defmodule OpenSesame.MixProject do
     [
       app: :open_sesame,
       version: "0.1.0",
-      elixir: "~> 1.4",
+      elixir: "~> 1.6",
       target: @target,
-      archives: [nerves_bootstrap: "~> 1.0.0-rc"],
-      deps_path: "deps/#{@target}",
-      build_path: "_build/#{@target}",
-      lockfile: "mix.lock.#{@target}",
-      build_embedded: Mix.env() == :prod,
+      archives: [nerves_bootstrap: "~> 1.0-rc"],
+      build_path: "../../_build/#{@target}",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps/#{@target}",
+      lockfile: "../../mix.lock.#{@target}",
       start_permanent: Mix.env() == :prod,
       aliases: [loadconfig: [&bootstrap/1]],
       deps: deps()
@@ -39,12 +39,19 @@ defmodule OpenSesame.MixProject do
   end
 
   def application(_target) do
-    [mod: {OpenSesame.Application, []}, extra_applications: [:logger]]
+    [
+      mod: {OpenSesame.Application, []},
+      extra_applications: [:logger]
+    ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    [{:nerves, "~> 0.9", runtime: false}] ++ deps(@target)
+    [
+      {:nerves, "~> 1.0-rc", runtime: false},
+      {:ui, in_umbrella: true},
+      {:cloud, in_umbrella: true}
+    ] ++ deps(@target)
   end
 
   # Specify target specific dependencies
@@ -56,17 +63,16 @@ defmodule OpenSesame.MixProject do
       {:nerves_runtime, "~> 0.4"},
       {:nerves_init_gadget, "~> 0.3.0"},
       {:nerves_firmware_ssh, "~> 0.3.2"},
-      {:elixir_ale, "~> 1.0.3"},
-      {:ui, in_umbrella: true}
+      {:elixir_ale, "~> 1.0.3"}
     ] ++ system(target)
   end
 
   defp system("rpi0") do
-    [{:nerves_system_rpi0, ">= 0.0.0", runtime: false}]
+    [{:nerves_system_rpi0, "~> 1.0-rc", runtime: false}]
   end
 
   defp system("rpi") do
-    [{:nerves_system_rpi, ">= 0.0.0", runtime: false}]
+    [{:nerves_system_rpi, "~> 1.0-rc", runtime: false}]
   end
 
   defp system(target) do

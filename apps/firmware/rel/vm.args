@@ -4,7 +4,7 @@
 ##  The cookie needs to be configured prior to vm boot for
 ##  for read only filesystem.
 
-# -name open_sesame@0.0.0.0
+-name open_sesame@0.0.0.0
 -setcookie 8PoUaaMK+KHTsQoDwfH4I/2iom8e2U8AZpnE1x9/zWQLXStuC3p+HnV0RcbWHDic
 
 ## Use Ctrl-C to interrupt the current shell rather than invoking the emulator's

@@ -16,16 +16,21 @@ defmodule OpenSesame.GarageWorker do
   end
 
   def handle_cast(:toggle, state) do
+    Cloud.submit_log(%{status: "Toggle Called"})
     update_relay_pin_status(state)
+    Cloud.submit_log(%{status: "Toggled Door"})
     {:noreply, state}
   end
 
   # ===================================
 
   defp init_gpio do
+    Cloud.submit_log(%{status: "Initializing GPIO"})
     {:ok, pid} = GPIO.start_link(@pin, :output)
+
     # must start with off status which is "true"
     GPIO.write(pid, true)
+    Cloud.submit_log(%{status: "Initialized GPIO"})
     pid
   end
 

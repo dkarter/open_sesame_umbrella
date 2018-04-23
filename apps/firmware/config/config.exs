@@ -25,8 +25,7 @@ config :nerves_firmware_ssh,
     File.read!(Path.join(System.user_home!(), ".ssh/nerves.pub"))
   ]
 
-config :logger, backends: [RingLogger]
-config :logger, RingLogger, max_size: 100
+config :cloud, :app_name, "open_sesame"
 
 config :nerves_init_gadget,
   ifname: "wlan0",
@@ -56,3 +55,7 @@ config :ui, UiWeb.Endpoint,
   render_errors: [accepts: ~w(html json)],
   pubsub: [name: Ui.PUbSub, adapter: Phoenix.PubSub.PG2],
   code_reloader: false
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env()}.exs"
